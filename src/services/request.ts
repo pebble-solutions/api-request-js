@@ -23,6 +23,25 @@ export function getRequest(url: string, params?: Record<string, any>, options?: 
     })
 }
 
+export function patchRequest(url: string, params?: object) {
+    return new Request(url, params, {
+        method: "PATCH"
+    })
+}
+
+export function putRequest(url: string, params?: object) {
+    return new Request(url, params, {
+        method: "PUT"
+    })
+}
+
+export function deleteRequest(url: string, params?: object) {
+    return new Request(url, params, {
+        method: "DELETE"
+    })
+}
+
+
 /**
  * Create a post request
  *
