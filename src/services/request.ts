@@ -1,5 +1,7 @@
 import {Request} from "../classes/Request";
 
+type OutParamsType = Record<string, any> | Record<string, any>[] | FormData
+
 /**
  * Create a get request.
  *
@@ -17,26 +19,61 @@ export function getRequest(url: string, params?: Record<string, any>, options?: 
         url = url.replace(/\?&/, "?")
     }
 
-    return new Request(url, params, {
+    return new Request(url, {
         ...options,
         method: "GET"
     })
 }
 
-export function patchRequest(url: string, params?: object) {
-    return new Request(url, params, {
-        method: "PATCH"
-    })
+/**
+ * Create a patch request
+ *
+ * By default, params will be sent with application/json encoding through the body options.
+ *
+ * @param url               URL onto which the request will be sent
+ * @param params            Request parameters
+ * @param options           Fetch options that will be sent with the request
+ */
+export function patchRequest(url: string, params?: OutParamsType, options?: RequestInit) {
+
+    options = {
+        ...options,
+        method: "PATCH",
+        body: encodeOutBody(params)
+    }
+
+    return new Request(url, options)
 }
 
-export function putRequest(url: string, params?: object) {
-    return new Request(url, params, {
-        method: "PUT"
-    })
+/**
+ * Create a put request
+ *
+ * By default, params will be sent with application/json encoding through the body options.
+ *
+ * @param url               URL onto which the request will be sent
+ * @param params            Request parameters
+ * @param options           Fetch options that will be sent with the request
+ */
+export function putRequest(url: string, params?: OutParamsType, options?: RequestInit) {
+
+    options = {
+        ...options,
+        method: "PUT",
+        body: encodeOutBody(params)
+    }
+
+    return new Request(url, options)
 }
 
-export function deleteRequest(url: string, params?: object) {
-    return new Request(url, params, {
+/**
+ * Create a delete request
+ *
+ * @param url               URL onto which the request will be sent
+ * @param options           Fetch options that will be sent with the request
+ */
+export function deleteRequest(url: string, options: RequestInit) {
+    return new Request(url, {
+        ...options,
         method: "DELETE"
     })
 }
@@ -51,16 +88,23 @@ export function deleteRequest(url: string, params?: object) {
  * @param params            Request parameters
  * @param options           Fetch options that will be sent with the request
  */
-export function postRequest(url: string, params?: object, options?: RequestInit) {
+export function postRequest(url: string, params?: OutParamsType, options?: RequestInit) {
 
     options = {
         ...options,
         method: "POST",
-        body: JSON.stringify(params),
-        headers: {
-            "Content-Type": "application/json"
-        }
+        body: encodeOutBody(params)
     }
 
-    return new Request(url, params, options)
+    return new Request(url, options)
+}
+
+/**
+ * Encode request parameters onto request body depending on the content type. Parameters can be FormData encoded otherwise
+ * it is considered as JSON.
+ *
+ * @param params            Request parameters
+ */
+function encodeOutBody(params?: OutParamsType) {
+    return params instanceof FormData ? params : JSON.stringify(params)
 }
