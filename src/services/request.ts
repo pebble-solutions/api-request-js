@@ -1,6 +1,6 @@
 import {Request} from "../classes/Request";
 
-type OutParamsType = Record<string, any> | Record<string, any>[] | FormData
+type WriteParamsType = Record<string, any> | Record<string, any>[] | FormData
 
 /**
  * Create a get request.
@@ -11,7 +11,8 @@ type OutParamsType = Record<string, any> | Record<string, any>[] | FormData
  * @param params            URL parameters
  * @param options           Fetch options that will be sent with the request
  */
-export function getRequest(url: string, params?: Record<string, any>, options?: RequestInit) {
+export function getRequest(url: string, params?: Record<string, any>, options?: RequestInit)
+{
 
     if (params) {
         const separator = url.match(/\?/) ? "&" : "?"
@@ -34,15 +35,9 @@ export function getRequest(url: string, params?: Record<string, any>, options?: 
  * @param params            Request parameters
  * @param options           Fetch options that will be sent with the request
  */
-export function patchRequest(url: string, params?: OutParamsType, options?: RequestInit) {
-
-    options = {
-        ...options,
-        method: "PATCH",
-        body: encodeOutBody(params)
-    }
-
-    return new Request(url, options)
+export function patchRequest(url: string, params?: WriteParamsType, options?: RequestInit)
+{
+    return new Request(url, prepareWriteOptions("PATCH", params, options))
 }
 
 /**
@@ -54,15 +49,9 @@ export function patchRequest(url: string, params?: OutParamsType, options?: Requ
  * @param params            Request parameters
  * @param options           Fetch options that will be sent with the request
  */
-export function putRequest(url: string, params?: OutParamsType, options?: RequestInit) {
-
-    options = {
-        ...options,
-        method: "PUT",
-        body: encodeOutBody(params)
-    }
-
-    return new Request(url, options)
+export function putRequest(url: string, params?: WriteParamsType, options?: RequestInit)
+{
+    return new Request(url, prepareWriteOptions("PUT", params, options))
 }
 
 /**
@@ -71,7 +60,8 @@ export function putRequest(url: string, params?: OutParamsType, options?: Reques
  * @param url               URL onto which the request will be sent
  * @param options           Fetch options that will be sent with the request
  */
-export function deleteRequest(url: string, options: RequestInit) {
+export function deleteRequest(url: string, options: RequestInit)
+{
     return new Request(url, {
         ...options,
         method: "DELETE"
@@ -88,15 +78,9 @@ export function deleteRequest(url: string, options: RequestInit) {
  * @param params            Request parameters
  * @param options           Fetch options that will be sent with the request
  */
-export function postRequest(url: string, params?: OutParamsType, options?: RequestInit) {
-
-    options = {
-        ...options,
-        method: "POST",
-        body: encodeOutBody(params)
-    }
-
-    return new Request(url, options)
+export function postRequest(url: string, params?: WriteParamsType, options?: RequestInit)
+{
+    return new Request(url, prepareWriteOptions("POST", params, options))
 }
 
 /**
@@ -105,6 +89,50 @@ export function postRequest(url: string, params?: OutParamsType, options?: Reque
  *
  * @param params            Request parameters
  */
-function encodeOutBody(params?: OutParamsType) {
+function encodeOutBody(params?: WriteParamsType)
+{
     return params instanceof FormData ? params : JSON.stringify(params)
+}
+
+/**
+ * Prepare the output request options in order to make them consistency with params type, content type and request
+ * method.
+ *
+ * @param method            HTTP request method
+ * @param params            Request parameters
+ * @param options           Fetch options that will be sent with the request
+ */
+function prepareWriteOptions(method: string, params?: WriteParamsType, options?: RequestInit)
+{
+    options = options ?? {}
+
+    let headers = new Headers(options.headers)
+
+    // Content-Type is set to application/json by default if params is set.
+    if (params && !(params instanceof FormData)) {
+        headers.set("Content-Type", "application/json")
+    }
+
+    if (params instanceof FormData) {
+        const contentType = headers.get("Content-Type")
+
+        // Bad content type for FormData are removed
+        if (contentType) {
+            if (!contentType.match(/^multipart\/form-data/) && !contentType.match(/^application\/x-www-form-urlencoded/)) {
+                headers.delete("Content-Type")
+            }
+        }
+    }
+
+    options.headers = {}
+
+    for (const header of headers.entries()) {
+        options.headers[header[0]] = header[1]
+    }
+
+    return {
+        ...options,
+        method,
+        body: encodeOutBody(params)
+    };
 }
