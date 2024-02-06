@@ -60,7 +60,7 @@ export function putRequest(url: string, params?: WriteParamsType, options?: Requ
  * @param url               URL onto which the request will be sent
  * @param options           Fetch options that will be sent with the request
  */
-export function deleteRequest(url: string, options: RequestInit)
+export function deleteRequest(url: string, options?: RequestInit)
 {
     return new Request(url, {
         ...options,
@@ -89,7 +89,7 @@ export function postRequest(url: string, params?: WriteParamsType, options?: Req
  *
  * @param params            Request parameters
  */
-function encodeOutBody(params?: WriteParamsType)
+function encodeWriteBody(params?: WriteParamsType)
 {
     return params instanceof FormData ? params : JSON.stringify(params)
 }
@@ -133,6 +133,6 @@ function prepareWriteOptions(method: string, params?: WriteParamsType, options?:
     return {
         ...options,
         method,
-        body: encodeOutBody(params)
+        body: encodeWriteBody(params)
     };
 }

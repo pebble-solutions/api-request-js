@@ -1,5 +1,5 @@
-import {RequestOptionsInterface} from "../interfaces/RequestOptionsInterface";
 import {RequestNotSentError} from "../errors/RequestNotSentError";
+import {AuthorizationInterface} from "../interfaces/AuthorizationInterface";
 
 export class Request {
 
@@ -11,7 +11,7 @@ export class Request {
     /**
      * Request parameters
      */
-    readonly options?: RequestInit
+    options?: RequestInit
 
     /**
      * Response once the request is sent
@@ -24,6 +24,12 @@ export class Request {
      * @private
      */
     private sent: boolean
+
+    /**
+     * Store the authorization object if request need authorization.
+     * @private
+     */
+    private authorization?: AuthorizationInterface
 
     constructor(url: string, options?: RequestInit) {
         this.url = url;
@@ -38,8 +44,66 @@ export class Request {
      * Send the request and store the response in the Request object
      */
     async send() {
-        this.response = await fetch(this.url, this.options)
+
+        let options: RequestInit = {...this.options}
+
+        if (this.authorization) {
+            options = this.setHeaderToOptions("Authorization", this.authorization.getToken())
+        }
+
+        this.response = await fetch(this.url, options)
         this.sent = true
+    }
+
+    /**
+     * Add a header to the request option request. This method create and return a copy of the original request options.
+     *
+     * @param key               Header key
+     * @param value             Header value
+     * @param options           Input options. If not set, use instance options value
+     *
+     * @private
+     */
+    private setHeaderToOptions(key: string, value: string | null, options?: RequestInit) {
+        options = options || this.options || {}
+        options = {...options}
+
+        const headers = new Headers(options.headers)
+
+        if (value) {
+            headers.set(key, value)
+        } else {
+            headers.delete(key)
+        }
+
+        options.headers = {}
+
+        for (const header of headers.entries()) {
+            options.headers[header[0]] = header[1]
+        }
+
+        return options
+    }
+
+    /**
+     * Add header to the request.
+     *
+     * @param key               Header key
+     * @param value             Header value
+     */
+    withHeader(key: string, value: string): this {
+        this.options = this.setHeaderToOptions(key, value)
+        return this
+    }
+
+    /**
+     * Remove header from the request.
+     *
+     * @param key               Header key
+     */
+    removeHeader(key: string): this {
+        this.options = this.setHeaderToOptions(key, null)
+        return this
     }
 
     /**
@@ -78,6 +142,23 @@ export class Request {
      */
     isSent(): boolean {
         return this.sent
+    }
+
+    /**
+     * Set the authorization information onto the request object
+     * @param auth
+     */
+    withAuth(auth: AuthorizationInterface): this {
+        this.authorization = auth
+        return this
+    }
+
+    /**
+     * Remove authorization information from the request
+     */
+    removeAuth(): this {
+        this.authorization = undefined
+        return this
     }
 
 }
