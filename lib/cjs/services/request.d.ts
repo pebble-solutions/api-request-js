@@ -1,6 +1,7 @@
 import { Request } from "../classes/Request";
 import { ReadParamsType, WriteParamsType } from "../types/params";
 import { RequestsController } from "../classes/RequestsController";
+import { Bucket } from "../classes/Bucket";
 /**
  * Create a get request.
  *
@@ -63,3 +64,4 @@ export declare function headRequest(url: string, options?: RequestInit): Request
  */
 export declare function postRequest(url: string, params?: WriteParamsType, options?: RequestInit): Request;
 export declare function createRequestsController(): RequestsController;
+export declare function createRequestsBucket(): Bucket;

@@ -14,4 +14,8 @@ export declare class Bucket {
      * Send queued requests and return all results once all process is done.
      */
     send(): Promise<any[]>;
+    /**
+     * Get content off all request at a time.
+     */
+    content(): Promise<any[]>;
 }

@@ -1,6 +1,7 @@
 import {Request} from "../classes/Request";
 import {ReadParamsType, WriteParamsType} from "../types/params";
 import {RequestsController} from "../classes/RequestsController";
+import {Bucket} from "../classes/Bucket";
 
 /**
  * Create a get request.
@@ -166,4 +167,8 @@ function prepareWriteOptions(method: string, params?: WriteParamsType, options?:
 
 export function createRequestsController() {
     return new RequestsController()
+}
+
+export function createRequestsBucket() {
+    return new Bucket()
 }

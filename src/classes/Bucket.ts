@@ -34,4 +34,20 @@ export class Bucket {
 
         return Promise.all(queue)
     }
+
+    /**
+     * Get content off all request at a time.
+     */
+    content(): Promise<any[]> {
+
+        let queue: Promise<any>[] = []
+
+        this.requests.forEach(request => {
+            queue.push(new Promise((resolve, reject) => {
+                request.content().then(val => resolve(val)).catch((e) => reject(e))
+            }))
+        })
+
+        return Promise.all(queue)
+    }
 }
