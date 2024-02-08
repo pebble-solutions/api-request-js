@@ -1,5 +1,6 @@
 import { Request } from "../classes/Request";
-type WriteParamsType = Record<string, any> | Record<string, any>[] | FormData;
+import { ReadParamsType, WriteParamsType } from "../types/params";
+import { RequestsController } from "../classes/RequestsController";
 /**
  * Create a get request.
  *
@@ -9,7 +10,7 @@ type WriteParamsType = Record<string, any> | Record<string, any>[] | FormData;
  * @param params            URL parameters
  * @param options           Fetch options that will be sent with the request
  */
-export declare function getRequest(url: string, params?: Record<string, any>, options?: RequestInit): Request;
+export declare function getRequest(url: string, params?: ReadParamsType, options?: RequestInit): Request;
 /**
  * Create a patch request
  *
@@ -38,6 +39,20 @@ export declare function putRequest(url: string, params?: WriteParamsType, option
  */
 export declare function deleteRequest(url: string, options?: RequestInit): Request;
 /**
+ * Create an options request
+ *
+ * @param url               URL onto which the request will be sent
+ * @param options           Fetch options that will be sent with the request
+ */
+export declare function optionsRequest(url: string, options?: RequestInit): Request;
+/**
+ * Create a head request
+ *
+ * @param url               URL onto which the request will be sent
+ * @param options           Fetch options that will be sent with the request
+ */
+export declare function headRequest(url: string, options?: RequestInit): Request;
+/**
  * Create a post request
  *
  * By default, params will be sent with application/json encoding through the body options.
@@ -47,4 +62,4 @@ export declare function deleteRequest(url: string, options?: RequestInit): Reque
  * @param options           Fetch options that will be sent with the request
  */
 export declare function postRequest(url: string, params?: WriteParamsType, options?: RequestInit): Request;
-export {};
+export declare function createRequestsController(): RequestsController;

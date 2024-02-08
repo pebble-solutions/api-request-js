@@ -1,5 +1,6 @@
 import {RequestNotSentError} from "../errors/RequestNotSentError";
 import {AuthorizationInterface} from "../interfaces/AuthorizationInterface";
+import { v4 as uuidv4 } from "uuid";
 
 export class Request {
 
@@ -7,6 +8,11 @@ export class Request {
      * Url that must be fetched
      */
     readonly url: string
+
+    /**
+     * Request ID : a unique string to identify the request
+     */
+    readonly id: string
 
     /**
      * Request parameters
@@ -38,6 +44,7 @@ export class Request {
             ...options
         };
         this.sent = false
+        this.id = uuidv4()
     }
 
     /**

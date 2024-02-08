@@ -5,6 +5,10 @@ export declare class Request {
      */
     readonly url: string;
     /**
+     * Request ID : a unique string to identify the request
+     */
+    readonly id: string;
+    /**
      * Request parameters
      */
     options?: RequestInit;

@@ -1,6 +1,6 @@
 import {Request} from "../classes/Request";
-
-type WriteParamsType = Record<string, any> | Record<string, any>[] | FormData
+import {ReadParamsType, WriteParamsType} from "../types/params";
+import {RequestsController} from "../classes/RequestsController";
 
 /**
  * Create a get request.
@@ -11,7 +11,7 @@ type WriteParamsType = Record<string, any> | Record<string, any>[] | FormData
  * @param params            URL parameters
  * @param options           Fetch options that will be sent with the request
  */
-export function getRequest(url: string, params?: Record<string, any>, options?: RequestInit)
+export function getRequest(url: string, params?: ReadParamsType, options?: RequestInit)
 {
 
     if (params) {
@@ -68,6 +68,33 @@ export function deleteRequest(url: string, options?: RequestInit)
     })
 }
 
+/**
+ * Create an options request
+ *
+ * @param url               URL onto which the request will be sent
+ * @param options           Fetch options that will be sent with the request
+ */
+export function optionsRequest(url: string, options?: RequestInit)
+{
+    return new Request(url, {
+        ...options,
+        method: "OPTIONS"
+    })
+}
+
+/**
+ * Create a head request
+ *
+ * @param url               URL onto which the request will be sent
+ * @param options           Fetch options that will be sent with the request
+ */
+export function headRequest(url: string, options?: RequestInit)
+{
+    return new Request(url, {
+        ...options,
+        method: "HEAD"
+    })
+}
 
 /**
  * Create a post request
@@ -135,4 +162,8 @@ function prepareWriteOptions(method: string, params?: WriteParamsType, options?:
         method,
         body: encodeWriteBody(params)
     };
+}
+
+export function createRequestsController() {
+    return new RequestsController()
 }

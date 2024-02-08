@@ -12,7 +12,13 @@
   "author": "Guillaume MODARD <guillaume@pebble.bzh>",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
+    "@types/uuid": "^9.0.8",
     "typescript": "^5.3.3"
   },
-  "files": ["lib"]
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "uuid": "^9.0.1"
+  }
 }
