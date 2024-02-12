@@ -2,6 +2,7 @@ import {Request} from "../classes/Request";
 import {ReadParamsType, WriteParamsType} from "../types/params";
 import {RequestsController} from "../classes/RequestsController";
 import {Bucket} from "../classes/Bucket";
+import {ControllerOptions} from "../types/ControllerOptions";
 
 /**
  * Create a get request.
@@ -165,10 +166,22 @@ function prepareWriteOptions(method: string, params?: WriteParamsType, options?:
     };
 }
 
-export function createRequestsController() {
-    return new RequestsController()
+/**
+ * Request Controller is a bridge between authentication process and HTTP requests.
+ * In a controller, all requests will share the same authentication object.
+ *
+ * @param options
+ */
+export function createRequestsController(options?: ControllerOptions) {
+    return new RequestsController(options)
 }
 
-export function createRequestsBucket() {
-    return new Bucket()
+/**
+ * Bucket contains multiple requests that will be sent all together. All requests are places in a global promise that
+ * must be resolved before getting all the results.
+ *
+ * @param requests Request[]
+ */
+export function createRequestsBucket(requests?: Request[]) {
+    return new Bucket(requests)
 }

@@ -1,4 +1,2 @@
-import { AuthorizationInterface } from "../interfaces/AuthorizationInterface";
-export type ControllerOptions = {
-    auth?: AuthorizationInterface;
-};
+import { RequestsCollectionOptions } from "./RequestsCollectionOptions";
+export type ControllerOptions = RequestsCollectionOptions;

@@ -6,7 +6,8 @@ import {
     deleteRequest,
     optionsRequest,
     headRequest,
-    createRequestsController
+    createRequestsController,
+    createRequestsBucket
 } from "./services/request";
 
 export { getRequest,
@@ -16,5 +17,6 @@ export { getRequest,
     deleteRequest,
     optionsRequest,
     headRequest,
-    createRequestsController
+    createRequestsController,
+    createRequestsBucket
 }

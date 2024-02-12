@@ -12,67 +12,33 @@ import {
 import {ReadParamsType, WriteParamsType} from "../types/params";
 import {ControllerOptions} from "../types/ControllerOptions";
 import {Bucket} from "./Bucket";
+import {RequestsCollection} from "./RequestsCollection";
 
 /**
  * Request Controller is a bridge between authentication process and HTTP requests.
+ * In a controller, all requests will share the same authentication object.
+ *
+ * @param options ControllerOptions
  */
-export class RequestsController {
-
-    /**
-     * Authorization object that will be plugged on every request
-     * @private
-     */
-    private _auth?: AuthorizationInterface
-
-    /**
-     * List of used requests in the controller
-     * @private
-     */
-    private requests: (Request | Bucket)[]
+export class RequestsController extends RequestsCollection {
 
     constructor(options?: ControllerOptions) {
-        this.requests = []
-
-        if (options?.auth) {
-            this._auth = options.auth
-        }
+        super(options)
     }
 
     /**
-     * Return the authorization object that will be plugged on every request
+     * Add multiple requests into the controller.
+     *
+     * This method will create a requests bucket with a global send promise.
+     *
+     * @param requests
      */
-    get auth(): AuthorizationInterface | undefined {
-        return this._auth
-    }
+    addRequests(requests: Request[]): Bucket {
+        const bucket = new Bucket(requests)
 
-    /**
-     * Add an authorization object that will be plugged on every request
-     * @param auth
-     */
-    withAuth(auth: AuthorizationInterface): this {
-        this._auth = auth
-        return this
-    }
+        this.addRequest(bucket)
 
-    /**
-     * Remove the authorization object from the controller
-     */
-    removeAuth(): this {
-        this._auth = undefined
-        return this
-    }
-
-    /**
-     * Add a request into the controller
-     * @param request
-     */
-    addRequest(request: Request): Request {
-        if (this._auth) {
-            request.withAuth(this._auth)
-        }
-
-        this.requests.push(request)
-        return request
+        return bucket
     }
 
     /**

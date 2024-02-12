@@ -1,40 +1,24 @@
-import { AuthorizationInterface } from "../interfaces/AuthorizationInterface";
 import { Request } from "./Request";
 import { ReadParamsType, WriteParamsType } from "../types/params";
 import { ControllerOptions } from "../types/ControllerOptions";
+import { Bucket } from "./Bucket";
+import { RequestsCollection } from "./RequestsCollection";
 /**
  * Request Controller is a bridge between authentication process and HTTP requests.
+ * In a controller, all requests will share the same authentication object.
+ *
+ * @param options ControllerOptions
  */
-export declare class RequestsController {
-    /**
-     * Authorization object that will be plugged on every request
-     * @private
-     */
-    private _auth?;
-    /**
-     * List of used requests in the controller
-     * @private
-     */
-    private requests;
+export declare class RequestsController extends RequestsCollection {
     constructor(options?: ControllerOptions);
     /**
-     * Return the authorization object that will be plugged on every request
+     * Add multiple requests into the controller.
+     *
+     * This method will create a requests bucket with a global send promise.
+     *
+     * @param requests
      */
-    get auth(): AuthorizationInterface | undefined;
-    /**
-     * Add an authorization object that will be plugged on every request
-     * @param auth
-     */
-    withAuth(auth: AuthorizationInterface): this;
-    /**
-     * Remove the authorization object from the controller
-     */
-    removeAuth(): this;
-    /**
-     * Add a request into the controller
-     * @param request
-     */
-    addRequest(request: Request): Request;
+    addRequests(requests: Request[]): Bucket;
     /**
      * Add a get request into the controller
      *
@@ -42,7 +26,7 @@ export declare class RequestsController {
      * @param params            Request parameters that will be sent through URL encoding
      * @param options           Request options
      */
-    get(url: string, params?: ReadParamsType, options?: RequestInit): Request;
+    get(url: string, params?: ReadParamsType, options?: RequestInit): Request | Bucket;
     /**
      * Add a post request into the controller
      *
@@ -50,7 +34,7 @@ export declare class RequestsController {
      * @param params            Request parameters that will be sent in json
      * @param options           Request options
      */
-    post(url: string, params?: WriteParamsType, options?: RequestInit): Request;
+    post(url: string, params?: WriteParamsType, options?: RequestInit): Request | Bucket;
     /**
      * Add a put request into the controller
      *
@@ -58,7 +42,7 @@ export declare class RequestsController {
      * @param params            Request parameters that will be sent in json
      * @param options           Request options
      */
-    put(url: string, params?: WriteParamsType, options?: RequestInit): Request;
+    put(url: string, params?: WriteParamsType, options?: RequestInit): Request | Bucket;
     /**
      * Add a patch request into the controller
      *
@@ -66,26 +50,26 @@ export declare class RequestsController {
      * @param params            Request parameters that will be sent in json
      * @param options           Request options
      */
-    patch(url: string, params?: WriteParamsType, options?: RequestInit): Request;
+    patch(url: string, params?: WriteParamsType, options?: RequestInit): Request | Bucket;
     /**
      * Add a delete request into the controller
      *
      * @param url               Request URL
      * @param options           Request options
      */
-    delete(url: string, options?: RequestInit): Request;
+    delete(url: string, options?: RequestInit): Request | Bucket;
     /**
      * Add an options request into the controller
      *
      * @param url               Request URL
      * @param options           Request options
      */
-    options(url: string, options?: RequestInit): Request;
+    options(url: string, options?: RequestInit): Request | Bucket;
     /**
      * Add a head request into the controller
      *
      * @param url               Request URL
      * @param options           Request options
      */
-    head(url: string, options?: RequestInit): Request;
+    head(url: string, options?: RequestInit): Request | Bucket;
 }

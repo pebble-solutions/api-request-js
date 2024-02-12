@@ -1,5 +1,6 @@
 import { AuthorizationInterface } from "../interfaces/AuthorizationInterface";
-export declare class Request {
+import { RequestType } from "../types/RequestType";
+export declare class Request implements RequestType {
     /**
      * Url that must be fetched
      */
@@ -30,6 +31,8 @@ export declare class Request {
     constructor(url: string, options?: RequestInit);
     /**
      * Send the request and store the response in the Request object
+     *
+     * @throws HTTPError
      */
     send(): Promise<void>;
     /**

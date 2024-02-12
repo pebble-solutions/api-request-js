@@ -1,8 +1,11 @@
 import {RequestNotSentError} from "../errors/RequestNotSentError";
 import {AuthorizationInterface} from "../interfaces/AuthorizationInterface";
 import { v4 as uuidv4 } from "uuid";
+import {RequestType} from "../types/RequestType";
+import {HTTPResponseError} from "../errors/HTTPResponseError";
+import {getErrorMessage} from "../services/error";
 
-export class Request {
+export class Request implements RequestType {
 
     /**
      * Url that must be fetched
@@ -49,17 +52,24 @@ export class Request {
 
     /**
      * Send the request and store the response in the Request object
+     *
+     * @throws HTTPError
      */
     async send() {
 
         let options: RequestInit = {...this.options}
 
         if (this.authorization) {
-            options = this.setHeaderToOptions("Authorization", this.authorization.getToken())
+            const token = await this.authorization.getToken()
+            options = this.setHeaderToOptions("Authorization", token)
         }
 
         this.response = await fetch(this.url, options)
         this.sent = true
+
+        if (!this.response.ok) {
+            throw new HTTPResponseError(await getErrorMessage(this), this.response)
+        }
     }
 
     /**
@@ -136,11 +146,11 @@ export class Request {
 
         const contentType = this.response.headers.get("Content-Type")
 
-        switch (contentType) {
-            case "application/json":
-                return await this.response.json()
-            default:
-                return await this.response.text()
+        if (contentType?.match("application/json")) {
+            return await this.response.json()
+        }
+        else {
+            return await this.response.text()
         }
     }
 
