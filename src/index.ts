@@ -9,6 +9,8 @@ import {
     createRequestsController,
     createRequestsBucket
 } from "./services/request";
+import {HTTPError} from "./errors/HTTPError"
+import {HTTPResponseError} from "./errors/HTTPResponseError"
 
 export { getRequest,
     postRequest,
@@ -18,5 +20,7 @@ export { getRequest,
     optionsRequest,
     headRequest,
     createRequestsController,
-    createRequestsBucket
+    createRequestsBucket,
+    HTTPError,
+    HTTPResponseError
 }

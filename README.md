@@ -35,15 +35,23 @@ console.log(content)
 
 ### Manage authentication with controller
 
-Api Request Library provide a request controller that can manage authentication mechanisms 
-on multiple requests.
+Api Request Library provide a requests controller that can manage authentication mechanisms on multiple requests.
+Request Controller is a bridge between authentication process and HTTP requests. In a controller, all requests will 
+share the same authentication object.
 
 ```TypeScript
 import {createRequestsController} from "@pebble-solutions/api-request";
 
-const authController = // The auth object according to AuthorizationInterface rules
+// Auth object :
+// The auth object must respect AuthorizationInterface rules
+const auth = {
+    getToken: () => {
+        return Promise.resolve("valid.authorization.token")
+    }
+}
 
-const controller = createRequestsController().withAuth(authController)
+// Plug auth onto a new requests controller
+const controller = createRequestsController().withAuth(auth)
 
 // All the following requests will be authenticated.
 
@@ -65,8 +73,10 @@ await request2.send()
 
 ### Requests bucket
 
-A bucket is a way to send multiple requests at the same time. All the process is sent
-and return in one time.
+A bucket is a way to send multiple requests at the same time. Bucket contains multiple requests that will be sent all 
+together. All requests are places in a global promise that must be resolved before getting all the results.
+
+#### Create a bucket from scratch
 
 ```TypeScript
 
@@ -81,9 +91,69 @@ const bucket = createRequestsBucket([req1, req2])
 // All requests are sent at one time
 await bucket.send()
 
-// All content are returned in one time. Each iteration is one request content
-await bucket.content().forEach(content => {
+// All content is returned back on an array with the same index order as the original one
+const content = await bucket.content()
+
+content.forEach(content => {
     console.log(content)
 })
+
+```
+
+#### Create a bucket throughout a requests controller
+
+```TypeScript
+import {createRequestsController, getRequest} from "@pebble-solutions/api-request";
+
+// Auth object :
+// The auth object must respect AuthorizationInterface rules
+const auth = {
+    getToken: () => {
+        return Promise.resolve("valid.authorization.token")
+    }
+}
+
+// Plug auth onto a new requests controller
+const controller = createRequestsController().withAuth(auth)
+
+const req1 = getRequest("https://my-api.tld/resource")
+const req2 = getRequest("https://my-api.tld/config")
+
+// The addRequests (with an s) method will create a bucket with all provided requests
+const bucket = controller.addRequests([req1, req2])
+
+// All requests are sent at one time
+await bucket.send()
+
+// All content is returned back on an array with the same index order as the original one
+const content = await bucket.content()
+
+content.forEach(content => {
+    console.log(content)
+})
+```
+
+### Error management
+
+All errors that might occur during the request will throw through an `HTTPError` instance.
+
+```TypeScript
+import {getRequest, HTTPResponseError} from "@pebble-solutions/api-request";
+
+const request = getRequest("https://my-api.tld/resource")
+
+try {
+    await request.send()
+
+    const content = await request.content()
+
+    console.log(content)
+} catch (e) {
+    console.log("Error occure : ", e.message)
+
+    if (e instanceof HTTPResponseError) {
+        console.log("More informations : ", e.status, e.statusText)
+    }
+}
 
 ```
