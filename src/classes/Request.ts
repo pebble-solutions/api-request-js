@@ -1,7 +1,7 @@
 import {RequestNotSentError} from "../errors/RequestNotSentError";
-import {AuthorizationInterface} from "../interfaces/AuthorizationInterface";
+import {AuthorizationInterface} from "../interfaces";
 import { v4 as uuidv4 } from "uuid";
-import {RequestType} from "../types/RequestType";
+import {RequestType} from "../types";
 import {HTTPResponseError} from "../errors/HTTPResponseError";
 import {getErrorMessage} from "../services/error";
 
@@ -53,7 +53,7 @@ export class Request implements RequestType {
     /**
      * Send the request and store the response in the Request object
      *
-     * @throws HTTPError
+     * @throws HTTPResponseError
      */
     async send() {
 

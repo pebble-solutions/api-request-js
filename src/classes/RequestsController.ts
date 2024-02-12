@@ -1,4 +1,3 @@
-import {AuthorizationInterface} from "../interfaces/AuthorizationInterface";
 import {Request} from "./Request";
 import {
     deleteRequest,
@@ -9,8 +8,8 @@ import {
     postRequest,
     putRequest
 } from "../services/request";
-import {ReadParamsType, WriteParamsType} from "../types/params";
-import {ControllerOptions} from "../types/ControllerOptions";
+import {ReadParamsType, WriteParamsType} from "../types";
+import {ControllerOptions} from "../types";
 import {Bucket} from "./Bucket";
 import {RequestsCollection} from "./RequestsCollection";
 

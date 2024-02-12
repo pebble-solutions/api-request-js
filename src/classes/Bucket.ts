@@ -1,9 +1,8 @@
 import {Request} from "./Request";
 import { v4 as uuidv4 } from "uuid";
-import {AuthorizationInterface} from "../interfaces/AuthorizationInterface";
 import {RequestsCollection} from "./RequestsCollection";
-import {RequestsCollectionOptions} from "../types/RequestsCollectionOptions";
-import {RequestType} from "../types/RequestType";
+import {RequestsCollectionOptions} from "../types";
+import {RequestType} from "../types";
 
 /**
  * Bucket contains multiple requests that will be sent all together. All requests are places in a global promise that

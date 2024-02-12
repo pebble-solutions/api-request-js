@@ -7,12 +7,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf ./lib/ &&  tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "doc": "npx typedoc"
   },
   "author": "Guillaume MODARD <guillaume@pebble.bzh>",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/uuid": "^9.0.8",
+    "typedoc": "^0.25.8",
     "typescript": "^5.3.3"
   },
   "files": [
