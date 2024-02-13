@@ -1,5 +1,5 @@
-import { AuthorizationInterface } from "../interfaces/AuthorizationInterface";
-import { RequestType } from "../types/RequestType";
+import { AuthorizationInterface } from "../interfaces";
+import { RequestType } from "../types";
 export declare class Request implements RequestType {
     /**
      * Url that must be fetched
@@ -32,7 +32,7 @@ export declare class Request implements RequestType {
     /**
      * Send the request and store the response in the Request object
      *
-     * @throws HTTPError
+     * @throws HTTPResponseError
      */
     send(): Promise<void>;
     /**

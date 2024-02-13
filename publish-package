@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "Package publication process"
+
+echo "NPM version convention is based on three parts : major.minor.patch (ex : 1.0.4)."
+
+read -p "Which version type is going to be deployed ? (major/minor/patch) " type
+
+case $type in
+  major|minor|patch ) echo "Publishing $type version..."
+    npm version "$type"
+    npm publish
+    git push
+    exit;;
+  * ) echo "Invalid version type, abort."
+    exit;;
+esac

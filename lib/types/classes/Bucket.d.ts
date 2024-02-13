@@ -1,7 +1,7 @@
 import { Request } from "./Request";
 import { RequestsCollection } from "./RequestsCollection";
-import { RequestsCollectionOptions } from "../types/RequestsCollectionOptions";
-import { RequestType } from "../types/RequestType";
+import { RequestsCollectionOptions } from "../types";
+import { RequestType } from "../types";
 /**
  * Bucket contains multiple requests that will be sent all together. All requests are places in a global promise that
  * must be resolved before getting all the results.

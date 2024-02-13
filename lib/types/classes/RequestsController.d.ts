@@ -1,6 +1,6 @@
 import { Request } from "./Request";
-import { ReadParamsType, WriteParamsType } from "../types/params";
-import { ControllerOptions } from "../types/ControllerOptions";
+import { ReadParamsType, WriteParamsType } from "../types";
+import { ControllerOptions } from "../types";
 import { Bucket } from "./Bucket";
 import { RequestsCollection } from "./RequestsCollection";
 /**

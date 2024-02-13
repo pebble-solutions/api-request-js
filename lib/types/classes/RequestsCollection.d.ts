@@ -1,7 +1,7 @@
-import { AuthorizationInterface } from "../interfaces/AuthorizationInterface";
+import { AuthorizationInterface } from "../interfaces";
 import { Bucket } from "./Bucket";
 import { Request } from "./Request";
-import { RequestsCollectionOptions } from "../types/RequestsCollectionOptions";
+import { RequestsCollectionOptions } from "../types";
 export declare abstract class RequestsCollection {
     /**
      * Authorization object that will be plugged on every request

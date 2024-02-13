@@ -1,8 +1,8 @@
-import { Request } from "../classes/Request";
-import { ReadParamsType, WriteParamsType } from "../types/params";
-import { RequestsController } from "../classes/RequestsController";
-import { Bucket } from "../classes/Bucket";
-import { ControllerOptions } from "../types/ControllerOptions";
+import { Request } from "../classes";
+import { ReadParamsType, WriteParamsType } from "../types";
+import { RequestsController } from "../classes";
+import { Bucket } from "../classes";
+import { ControllerOptions } from "../types";
 /**
  * Create a get request.
  *
