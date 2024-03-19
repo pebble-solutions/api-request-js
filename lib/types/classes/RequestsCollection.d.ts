@@ -53,4 +53,8 @@ export declare abstract class RequestsCollection {
      * @param request
      */
     addRequest(request: Request | Bucket): Request | Bucket;
+    /**
+     * Clear all requests stored onto the collection
+     */
+    clear(): this;
 }
