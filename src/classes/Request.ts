@@ -145,6 +145,11 @@ export class Request implements RequestType {
         }
 
         const contentType = this.response.headers.get("Content-Type")
+        const contentLength = this.response.headers.get("Content-Length")
+
+        if (contentLength === "0" || this.response.status === 204) {
+            return null
+        }
 
         if (contentType?.match("application/json")) {
             return await this.response.json()

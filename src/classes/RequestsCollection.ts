@@ -93,4 +93,12 @@ export abstract class RequestsCollection {
         this._requests.push(request)
         return request
     }
+
+    /**
+     * Clear all requests stored onto the collection
+     */
+    clear(): this {
+        this._requests.splice(0, this._requests.length)
+        return this
+    }
 }
