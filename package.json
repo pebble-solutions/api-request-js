@@ -1,6 +1,6 @@
 {
   "name": "@pebble-solutions/api-request",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Send and get request from resource API with a full authentication and authorization process",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
