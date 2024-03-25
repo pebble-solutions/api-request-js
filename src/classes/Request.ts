@@ -61,7 +61,7 @@ export class Request implements RequestType {
 
         if (this.authorization) {
             const token = await this.authorization.getToken()
-            options = this.setHeaderToOptions("Authorization", token)
+            options = this.setHeaderToOptions("Authorization", "Bearer "+token)
         }
 
         this.response = await fetch(this.url, options)
